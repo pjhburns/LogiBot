@@ -1,0 +1,11 @@
+{
+  "name": "LogiBot",
+  "description": "This extension provides a virtual assistant for Logi Analytics BDRs",
+  "version": "1.0",
+  "manifest_version": 2,
+  "permissions": ["tabs", "http://*/*", "https://*/*", "background"],
+  "background": "background.html",
+  "content_scripts": [{"matches": ["http://*/*"],"js": ["inject.js"]}],
+  "browser_action": {"default_icon": "icon16.png","default_popup": "popup.html"},
+  "icons": {"16": "icon16.png","128": "logi.png"}
+}
