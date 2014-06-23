@@ -1,0 +1,130 @@
+// Example Code:
+
+// Load the Email plugin
+var emailHook = appAPI.hooks.register('emails');
+
+// Register to load event, it fires whenever user has entered gmail, live or yahoo
+emailHook.addListener('load', function(data) {
+    alert('user has entered: ' + data.emailName);
+    //returns a reference to body (some providers placing the content inside iframe / iframes)
+    var contentBody = this.getContentBody();
+});
+
+// Register to message event, it fires whenever the user view a message
+// CURRENLTY ONLY GMAIL SUPPORTS THIS EVENT
+
+emailHook.addListener('message', function(components) {
+    //returns the document body (not message body)
+    var contentBody = components.contentBody;
+});
+
+// Register to the compose event, it fires when user is in compose/reply state
+// callback function receives components object that contains reference to
+// all major properties like: to, cc, subject, editor etc.
+emailHook.addListener('compose', function(components) {
+    //components object properties
+    
+    // Set "to" input field with email address
+    components.to.val('test@test.com');
+    
+    // You can also set/get the following values
+    // alert(components.cc);
+    // alert(components.bcc);
+    // alert(components.subject);
+    // alert(components.editor);
+    // alert(components.editorToolbar);
+    // alert(components.panelButtons);
+    // alert(components.sendButton);
+
+    // The following method allows to add icon to the client's "Editor Toolbar" (the toolbox above the message body)
+    this.addEditorIcon('http://mysite.com/icon.png', function(components) {
+      
+        // This method pastes html to the content editor where at cursor current position.
+        // If the email editor is not "focused", html will be added at last cursor position.
+        this.pasteAtSelection('&lt;a href="http://mysite.com"&gt;&lt;img src="http://mysite.com/icon.png" width="24" height="24" style="position:relative;top:5px;margin-left:3px;margin-right:3px;border:none;"&gt;&lt;/a&gt;');
+
+        // Paste content at the start of editing area
+        this.pasteAtStart('&lt;a href="http://mysite.com"&gt;&lt;img src="http://mysite.com/image.png" width="24" height="24" style="position:relative;top:5px;margin-left:3px;margin-right:3px;border:none;"&gt;&lt;/a&gt;');
+        // Paste content at the end of editing area
+        this.pasteAtEnd('&lt;a href="http://mysite.com"&gt;&lt;img src="http://mysite.com/image.png" width="24" height="24" style="position:relative;top:5px;margin-left:3px;margin-right:3px;border:none;"&gt;&lt;/a&gt;');
+    });
+    
+    // This method adds a button next to the "Send" button
+    this.addPanelButton('My button text', function(components) {
+        // Get the "editor object" or components.editor
+        var editor = this.getComponent('editor');
+
+        // Replace editor html with your own
+        editor.html('&lt;div style="background-color:#FDF0FC;"&gt;' + editor.html() + '&lt;/div&gt;');
+    });
+
+});
+
+// Register the Send Button click event
+emailHook.addListener('send_button_clicked', function(components) {
+
+    // One of the coolest methods is to add your app's signaturre (html) to the editor (this works both on compose and reply)
+    this.addSignature('&lt;a href="http://mysite.com" style="font-size:11px;color:#5A5A5A;"&gt;This is a signature&lt;/a&gt;');
+
+});
+
+
+//Notification plugin:
+
+// Example Code:
+
+// This API allows you to dynamically create Crossrider notifications
+
+// Show a noticiation: (You can customize it with the following params)
+
+appAPI.notifier.show({
+ 'name':'my-notification-name', // Pick a distinctive name. it will not be displayed for the users but used by the system for identification.
+ 'title':'Notification Title', // Notification title [optional]
+ 'body':'&lt;span style="font-weight:bold;color:red;"&gt;Hello :)&lt;/span&gt;', // Notification body - supports HTML.
+ 'link':'http://mysite.com/welcome', // Notification target link. Will be opened when user clicks the notification
+ 'theme':'default', // Notification theme: "default", "facebook", "grey", "cyan", "orange", "lime", "navy", "dark-grey", "light-grey", "light-cyan", "peach", "light-green", "white-black", "white-blue", "white-darkred", "white-lime"
+ 'position':'top-right', // Notification position: "top-right", "top-left", "bottom-left", "bottom-right"
+ 'icon':'http://mysite.com/img.png', // Notification icon url [optional]
+ 'close':true, // Show close [X] icon
+ 'sticky':true, // If you set this to true the notification will not fade until the user clicks or closes it
+ 'fadeAfter':5, // Fade after X seconds (default 5 seconds) - valid only if sticky:false
+ 'width':'400px', // Notification width (default 275)
+ 'closeWhenClicked':true // Notification closes right after user click (default true)
+});
+
+// Nnotification events:
+// You can listen to all notification events (display, click, hover, close, fade) 
+// All events gets a data object as a parameter
+
+// Notification display event - fires when the notification is displayed to the user
+appAPI.notifier.events.add('display', function (data) {
+  alert(data.name);
+});
+
+// Notification click event - fires when the user clicks the notification
+var clickCallback = function (data) {
+  alert(data.name);
+};
+appAPI.notifier.events.add('click', clickCallback);
+
+// Notification hover event - fires when the user hovers the notification for the first time
+appAPI.notifier.events.add('hover', function (data) {
+  alert(data.name);
+});
+
+// Notification close event - fires when the user has clicked the close [X] button
+appAPI.notifier.events.add('close', function (data) {
+  alert(data.name);
+});
+
+// Notification fade event - fires when the notification faded out. 
+appAPI.notifier.events.add('fade', function (data) {
+  alert(data.name);
+});
+
+// Remove listener to a specific event
+appAPI.notifier.events.remove('click', clickCallback);
+
+// Remove (close) and reset the current notification from the page
+// This is usefull when you want to close the notification using your own events
+appAPI.notifier.reset();

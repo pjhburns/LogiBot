@@ -1,0 +1,87 @@
+//Intro to objects and attributes
+
+<html>
+    <head><title>Sandbox</title></head>
+    <body>
+        <h1>Sandbox page</h1>
+		<script type="text/javascript">
+		var ball = {
+			"color": "white",
+			"type": "baseball"
+		};
+
+		ball.weight = 15;
+		for (var prop in ball) {
+			alert(ball[prop]);
+		}
+		</script>
+    </body>
+</html>
+
+//HTML demonstrating DOM
+
+<html>
+    <head><title>Sandbox</title></head>
+    <body>
+        <div id="myDiv">Sandbox page</div>
+		<div class="divClass">Second line</div>
+		<div class="divClass">
+			<p class="pClass">This is in a paragraph</p>
+		</div>
+		<div class="divClass">Last line</div>
+
+    </body>
+</html>
+
+//JavaScript: Using getElementById function to access and change HTML elements
+
+<html>
+    <head><title>Fandbox</title></head>
+    <body>
+        <div id="myDiv">Hello</div>
+		<div class="divClass">Second line</div>
+		<div class="divClass">
+			<p class="pClass">This is in a paragraph</p>
+		</div>
+		<div class="divClass">Last line</div>
+		
+		<script type="text/javascript">
+		var theDiv = document.getElementById("myDiv");
+		theDiv.style.border = "3px solid black";
+		theDiv.innerHTML = "This is now changed text";
+		alert ("The content is " + theDiv.innerHTML);
+		</script>
+
+    </body>
+</html>
+
+//Detect a user's browser with the navigator object:
+
+<html>
+    <head><title>Sandbox</title></head>
+    <body>
+        <div id="output"></div>
+		<script type="text/javascript">
+		var outputDiv = document.getElementById("output");
+		outputDiv.style.border = "3px solid black";
+		outputDiv.style.padding = "3px";
+		
+		var userAgent = navigator.userAgent;
+		outputDiv.innerHTML = "You are using" + userAgent;
+		</script>
+    </body>
+</html>
+
+//Redirect a user with the location object:
+
+<html>
+    <head><title>Fandbox</title></head>
+    <body>
+        <div>
+			<a href="http://www.braingia.org">		Click here if you're not automatically redirected...</a>
+		</div>
+		<script type="text/javascript">
+		window.location.replace("http://www.braingia.org");
+		</script>
+    </body>
+</html>
